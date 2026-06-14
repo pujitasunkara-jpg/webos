@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>WebOS</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Inter", sans-serif;
+  color: white;
+  background: url("https://cdn.mos.cms.futurecdn.net/HuGGeENt6kGyixe3hT9tnY.jpg") center/cover no-repeat;
+}
+
+/* TOP BAR */
+.topbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 48px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0 18px;
+  font-size: 12px;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(12px);
+}
+
+/* WINDOW */
+.window {
+  position: absolute;
+  top: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 380px;
+
+  border-radius: 14px;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(14px);
+  overflow: hidden;
+}
+
+.hidden { display: none; }
+
+/* MAC HEADER */
+.windowheader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 8px 10px;
+  font-size: 12px;
+  background: rgba(0,0,0,0.25);
+}
+
+.traffic {
+  display: flex;
+  gap: 6px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.red { background: #ff5f57; cursor: pointer; }
+.yellow { background: #febc2e; }
+.green { background: #28c840; }
+
+/* CONTENT */
+.content {
+  padding: 14px;
+  font-size: 13px;
+}
+
+/* INPUTS */
+input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  margin-top: 10px;
+}
+
+button {
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background: white;
+}
+
+/* RESULT BOX */
+.result {
+  margin-top: 10px;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+/* NOTES */
+textarea {
+  width: 100%;
+  height: 180px;
+  border: none;
+  outline: none;
+  resize: none;
+  background: rgba(255,255,255,0.08);
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+/* DOCK */
+.dock {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  gap: 14px;
+
+  padding: 10px 16px;
+  border-radius: 18px;
+
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(12px);
+}
+
+.app {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.12);
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div>WebOS</div>
+  <div id="time"></div>
+</div>
+
+<!-- WELCOME -->
+<div class="window" id="welcome">
+  <div class="windowheader">
+    <div>Welcome</div>
+    <div class="traffic">
+      <div class="dot red" onclick="closeWindow('welcome')"></div>
+      <div class="dot yellow"></div>
+      <div class="dot green"></div>
+    </div>
+  </div>
+
+  <div class="content">
+    <h2>Welcome</h2>
+    <p>
+      Welcome to WebOS!<br>
+      An OS (operating system) to give you the best experience possible!
+    </p>
+  </div>
+</div>
+
+<!-- NOTES -->
+<div class="window hidden" id="notes">
+  <div class="windowheader">
+    <div>Notes</div>
+    <div class="traffic">
+      <div class="dot red" onclick="closeWindow('notes')"></div>
+      <div class="dot yellow"></div>
+      <div class="dot green"></div>
+    </div>
+  </div>
+
+  <div class="content">
+    <textarea placeholder="Type notes..."></textarea>
+  </div>
+</div>
+
+<!-- GLOBE (SEARCH APP) -->
+<div class="window hidden" id="globe">
+  <div class="windowheader">
+    <div>Globe Search</div>
+    <div class="traffic">
+      <div class="dot red" onclick="closeWindow('globe')"></div>
+      <div class="dot yellow"></div>
+      <div class="dot green"></div>
+    </div>
+  </div>
+
+  <div class="content">
+    <input id="searchBox" placeholder="Search the web..." />
+    <button onclick="runSearch()">Search</button>
+
+    <div class="result" id="result"></div>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div class="window hidden" id="settings">
+  <div class="windowheader">
+    <div>Settings</div>
+    <div class="traffic">
+      <div class="dot red" onclick="closeWindow('settings')"></div>
+      <div class="dot yellow"></div>
+      <div class="dot green"></div>
+    </div>
+  </div>
+
+  <div class="content">
+    <h3>Settings</h3>
+    <p>• WebOS version 1.0</p>
+    <p>• Theme: Space Mode 🌌</p>
+    <p>• Status: Running</p>
+  </div>
+</div>
+
+<!-- DOCK -->
+<div class="dock">
+  <div class="app" onclick="openApp('welcome')"><i class="fa-solid fa-desktop"></i></div>
+  <div class="app" onclick="openApp('notes')"><i class="fa-solid fa-note-sticky"></i></div>
+  <div class="app" onclick="openApp('globe')"><i class="fa-solid fa-globe"></i></div>
+  <div class="app" onclick="openApp('settings')"><i class="fa-solid fa-gear"></i></div>
+</div>
+
+<script>
+
+/* CLOCK */
+function updateTime() {
+  const now = new Date();
+  document.getElementById("time").innerHTML =
+    now.toLocaleDateString([], { weekday:"short", month:"short", day:"numeric" }) +
+    " • " +
+    now.toLocaleTimeString([], { hour:"2-digit", minute:"2-digit" });
+}
+setInterval(updateTime, 1000);
+updateTime();
+
+/* OPEN / CLOSE WINDOWS */
+function openApp(id) {
+  document.querySelectorAll(".window").forEach(w => w.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+}
+
+function closeWindow(id) {
+  document.getElementById(id).classList.add("hidden");
+}
+
+/* GLOBE SEARCH FUNCTION */
+function runSearch() {
+  const q = document.getElementById("searchBox").value;
+  document.getElementById("result").innerText =
+    "Searching for: " + q + " 🌐 (demo result)";
+}
+
+</script>
+
+</body>
+</html>
